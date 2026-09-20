@@ -182,8 +182,6 @@ The script builds Release x64, checks the output's PE architecture and expected 
 
 MinHook, spdlog and fmt are bundled. The DLL uses a static C runtime and its own MinHook instance. It stays loaded until the game exits; live unloading is not supported.
 
-The source still contains earlier version labels and diagnostic comments, including a `073_R1` plugin marker. These are inherited from the port and are also used by the current build script. They do not mean this v0.74 package has the old GUI enabled.
-
 The parser test is in `tests/config_test.cpp`. `VALIDATION.md` contains historical porting checks, not a fresh audit of this release.
 
 ## Credits and source data
