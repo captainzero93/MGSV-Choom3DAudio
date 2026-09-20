@@ -37,8 +37,10 @@ Edit `plugins/choomaudio.lua` and restart the game. The file looks like Lua, but
 | `audioPeakGuard` | `true` | Reduces excessive peaks in the processed world-sound path. |
 | `audioBedCentreDirect` | `false` | When enabled, sends a bed's centre channel through the game's downmix gains with a matching delay instead of an HRTF. Useful if centre dialogue sounds too coloured. |
 | `audioDebugLog` | `false` | Enables extended audio diagnostics when set to `true`. Startup logs and warnings still exist when it is `false`. |
-| `enableNullGuard` | `true` | Skips a known game call when its object argument is null. |
-| `enableViewGuard` | `true` | Skips a known view update when its render context is missing. |
+| `enableNullGuard` | `true` | Skips a known game call when its object argument is null. (harmless but maybe unrelated) |
+| `enableViewGuard` | `true` | Skips a known view update when its render context is missing. (harmless but maybe unrelated) |
+
+the 'Guard's came from 70+ iterations of testing which may have been caused by a corrupted save, they should not cause issues and should not be harmful either way, 
 
 `audioNativeHooks`, `audioListenerHook`, `audioMixerHook` and `audioFoxHooks` are troubleshooting switches. Leave all four enabled for normal use. Disabling an individual group can remove coverage or prevent processing.
 
