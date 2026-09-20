@@ -26,15 +26,6 @@ Close the game and copy both folders from `dist` into the folder containing `mgs
 
 Include the Lua loader. Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
 
-You can also install a completed build with:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameDirectory "F:\SteamLibrary\steamapps\common\MGS_TPP"
-```
-
-Replace F:... with install Dir. The installer preserves an existing plugin config.
-
-
 ## Settings
 
 Edit `plugins/choomaudio.lua` and restart the game. The file looks like Lua, but the native plugin reads literal settings from it rather than executing it. The separate loader module is executable Lua.
