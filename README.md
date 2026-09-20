@@ -32,7 +32,7 @@ You can also install a completed build with:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameDirectory "F:\SteamLibrary\steamapps\common\MGS_TPP"
 ```
 
-The installer preserves an existing plugin config.
+Replace F:... with install Dir. The installer preserves an existing plugin config.
 
 
 ## Settings
