@@ -399,3 +399,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# ChoomAudio build output
+/build/
+/dist/
+/ChoomAudio_plugin.zip
