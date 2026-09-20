@@ -178,8 +178,6 @@ The KU 100 is a measured dummy head, not your own head and ears. Front/back ambi
 
 Install Visual Studio with **Desktop development with C++** and a Windows SDK, then run `BUILD.cmd` from the extracted project folder.
 
-The script builds Release x64, checks the output's PE architecture and expected plugin markers, stages the three installation files, and creates `ChoomAudio_plugin.zip`.
-
 MinHook, spdlog and fmt are bundled. The DLL uses a static C runtime and its own MinHook instance. It stays loaded until the game exits; live unloading is not supported.
 
 The parser test is in `tests/config_test.cpp`. `VALIDATION.md` contains historical porting checks, not a fresh audit of this release.
