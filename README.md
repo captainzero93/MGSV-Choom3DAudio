@@ -1,4 +1,4 @@
-# Choom3DAudioMGSV
+#3DAudio for MGSV
 
 Binaural headphone audio for Metal Gear Solid V: The Phantom Pain.
 
