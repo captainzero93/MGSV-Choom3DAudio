@@ -26,15 +26,6 @@ Close the game and copy both folders from `dist` into the folder containing `mgs
 
 Include the Lua loader. Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
 
-You can also install a completed build with:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1 -GameDirectory "F:\SteamLibrary\steamapps\common\MGS_TPP"
-```
-
-The installer preserves an existing plugin config.
-
-
 ## Settings
 
 Edit `plugins/choomaudio.lua` and restart the game. The file looks like Lua, but the native plugin reads literal settings from it rather than executing it. The separate loader module is executable Lua.
@@ -46,8 +37,10 @@ Edit `plugins/choomaudio.lua` and restart the game. The file looks like Lua, but
 | `audioPeakGuard` | `true` | Reduces excessive peaks in the processed world-sound path. |
 | `audioBedCentreDirect` | `false` | When enabled, sends a bed's centre channel through the game's downmix gains with a matching delay instead of an HRTF. Useful if centre dialogue sounds too coloured. |
 | `audioDebugLog` | `false` | Enables extended audio diagnostics when set to `true`. Startup logs and warnings still exist when it is `false`. |
-| `enableNullGuard` | `true` | Skips a known game call when its object argument is null. |
-| `enableViewGuard` | `true` | Skips a known view update when its render context is missing. |
+| `enableNullGuard` | `true` | Skips a known game call when its object argument is null. (harmless but maybe unrelated) |
+| `enableViewGuard` | `true` | Skips a known view update when its render context is missing. (harmless but maybe unrelated) |
+
+the 'Guard's came from 70+ iterations of testing which may have been caused by a corrupted save, they should not cause issues and should not be harmful either way, 
 
 `audioNativeHooks`, `audioListenerHook`, `audioMixerHook` and `audioFoxHooks` are troubleshooting switches. Leave all four enabled for normal use. Disabling an individual group can remove coverage or prevent processing.
 
@@ -178,11 +171,7 @@ The KU 100 is a measured dummy head, not your own head and ears. Front/back ambi
 
 Install Visual Studio with **Desktop development with C++** and a Windows SDK, then run `BUILD.cmd` from the extracted project folder.
 
-The script builds Release x64, checks the output's PE architecture and expected plugin markers, stages the three installation files, and creates `ChoomAudio_plugin.zip`.
-
 MinHook, spdlog and fmt are bundled. The DLL uses a static C runtime and its own MinHook instance. It stays loaded until the game exits; live unloading is not supported.
-
-The source still contains earlier version labels and diagnostic comments, including a `073_R1` plugin marker. These are inherited from the port and are also used by the current build script. They do not mean this v0.74 package has the old GUI enabled.
 
 The parser test is in `tests/config_test.cpp`. `VALIDATION.md` contains historical porting checks, not a fresh audit of this release.
 
