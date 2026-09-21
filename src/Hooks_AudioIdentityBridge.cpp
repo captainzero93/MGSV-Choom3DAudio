@@ -258,6 +258,105 @@ namespace MGSVAudioIdentityBridge
         std::atomic<std::uint64_t> g_lowLevelTrackedCalls{ 0 };
         std::atomic<std::uint64_t> g_lowLevelTrackedViaMatrix{ 0 };
         std::atomic<std::uint64_t> g_lowLevelTrackedViaRender{ 0 };
+    }
+}
+
+            return false;
+        }
+
+        std::atomic<bool> g_installed{ false };
+        std::atomic<std::uint64_t> g_logRecords{ 0 };
+        std::atomic<bool> g_logLimitReported{ false };
+
+        std::atomic<std::uint64_t> g_sourceEvents{ 0 };
+        std::atomic<std::uint64_t> g_sourceRecordsValid{ 0 };
+        std::atomic<std::uint64_t> g_sourceRecordsInvalid{ 0 };
+        std::atomic<std::uint64_t> g_sourceTransforms{ 0 };
+        std::atomic<std::uint64_t> g_wwisePosts{ 0 };
+        std::atomic<std::uint64_t> g_wwisePostsWithRecord{ 0 };
+        std::atomic<std::uint64_t> g_gameObjectLookups{ 0 };
+        std::atomic<std::uint64_t> g_gameObjectLookupsTracked{ 0 };
+        std::atomic<std::uint64_t> g_actionDispatches{ 0 };
+        std::atomic<std::uint64_t> g_actionDispatchesTracked{ 0 };
+        std::atomic<std::uint64_t> g_playingIdMatches{ 0 };
+        std::atomic<std::uint64_t> g_objectFallbackMatches{ 0 };
+        std::atomic<std::uint64_t> g_traceDropped{ 0 };
+        std::atomic<std::uint64_t> g_summaryTick{ 0 };
+        std::atomic<std::uint64_t> g_tlsEventMatches{ 0 };
+        std::atomic<std::uint64_t> g_tlsEventMismatches{ 0 };
+        std::atomic<std::uint64_t> g_sourceZeroBeforeNonzeroAfter{ 0 };
+        std::atomic<std::uint64_t> g_sourceChangedAcrossCall{ 0 };
+        std::atomic<std::uint64_t> g_lookupTraceRows{ 0 };
+        std::atomic<std::uint64_t> g_sourceDerivedKeyMatches{ 0 };
+        std::atomic<std::uint64_t> g_tableSourceMatches{ 0 };
+        std::atomic<std::uint64_t> g_tableKeyMatches{ 0 };
+        std::atomic<std::uint64_t> g_playingEventPackCalls{ 0 };
+        std::atomic<std::uint64_t> g_playingEventPackTracked{ 0 };
+        std::atomic<std::uint64_t> g_playingEventPackOutputMatches{ 0 };
+        std::atomic<std::uint64_t> g_renderNodeCalls{ 0 };
+        std::atomic<std::uint64_t> g_renderSnapshotsQueued{ 0 };
+        std::atomic<std::uint64_t> g_renderSnapshotsProcessed{ 0 };
+        std::atomic<std::uint64_t> g_renderIdentityMatches{ 0 };
+        std::atomic<std::uint64_t> g_renderNoMatchRows{ 0 };
+        std::atomic<std::uint64_t> g_matrixCalls{ 0 };
+        std::atomic<std::uint64_t> g_matrixActiveCalls{ 0 };
+        std::atomic<std::uint64_t> g_matrixRouteBMonoStereo{ 0 };
+        std::atomic<std::uint64_t> g_matrixPlayingMatches{ 0 };
+        std::atomic<std::uint64_t> g_matrixDualIdentityMatches{ 0 };
+        std::atomic<std::uint64_t> g_matrixIdentityRenewals{ 0 };
+        std::atomic<std::uint64_t> g_matrixResearchMatches{ 0 };
+
+        // deterministic write-path telemetry.
+        std::atomic<bool> g_holdDirectHrtf{ false };
+        std::atomic<bool> g_holdWorldAuditionMute{ false };
+        std::atomic<std::uint64_t> g_worldAuditionMuteCalls{ 0 };
+        std::atomic<std::uint64_t> g_primaryFamilyCalls{ 0 };
+        std::atomic<std::uint64_t> g_primaryFamilyMuteCalls{ 0 };
+        std::atomic<std::uint64_t> g_alternateFamilyCalls{ 0 };
+        std::atomic<std::uint64_t> g_alternateFamilyMuteCalls{ 0 };
+        std::atomic<std::uint64_t> g_alternateFamilyTrackedContext{ 0 };
+
+        // final-sink audition.
+        std::atomic<std::uint64_t> g_sinkPumpCalls{ 0 };
+        std::atomic<std::uint64_t> g_sinkForcedSilenceCalls{ 0 };
+        std::atomic<std::uint64_t> g_sinkSkippedCalls{ 0 };
+        std::atomic<std::uintptr_t> g_lastSinkObject{ 0 };
+        std::atomic<std::uintptr_t> g_lastSinkVtable{ 0 };
+        std::atomic<std::uint32_t> g_lastSinkFrames{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfAttempts{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfAppliedBlocks{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfNoListener{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfNoTransform{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfBadPcm{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfLeftCalls{ 0 };
+        std::atomic<std::uint64_t> g_directHrtfRightCalls{ 0 };
+        std::atomic<bool> g_holdDirectDry{ false };
+        std::atomic<std::uint64_t> g_directDryAttempts{ 0 };
+        std::atomic<std::uint64_t> g_directDryAppliedBlocks{ 0 };
+        std::atomic<std::uint64_t> g_directDryLeftCalls{ 0 };
+        std::atomic<std::uint64_t> g_directDryRightCalls{ 0 };
+        std::atomic<std::uint64_t> g_binauralHistoryResets{ 0 };
+        std::atomic<std::uint64_t> g_wideHrtfMultiAttempts{ 0 };
+        std::atomic<std::uint64_t> g_wideHrtfMultiApplied{ 0 };
+        std::atomic<std::uint64_t> g_wideHrtfStereoApplied{ 0 };
+        std::atomic<std::uint64_t> g_wideHrtfQuadApplied{ 0 };
+        std::atomic<std::uint64_t> g_wideHrtfUnsupported{ 0 };
+
+        // Render coverage counters for voices matched to a Fox SoundSourceBody.
+        std::atomic<std::uint64_t> g_renderTrackedCalls{ 0 };
+        std::atomic<std::uint64_t> g_renderPlayingIdentity{ 0 };
+        std::atomic<std::uint64_t> g_renderObjectIdentity{ 0 };
+        std::atomic<std::uint64_t> g_renderDualIdentity{ 0 };
+        std::atomic<std::uint64_t> g_renderUnidentifiedCalls{ 0 };
+        std::atomic<std::uint64_t> g_matrixTrackedCalls{ 0 };
+        std::atomic<std::uint64_t> g_matrixTrackedRoute1{ 0 };
+        std::atomic<std::uint64_t> g_matrixTrackedRoute2{ 0 };
+        std::atomic<std::uint64_t> g_matrixTrackedRoute3{ 0 };
+        std::atomic<std::uint64_t> g_matrixTrackedOther{ 0 };
+        std::atomic<std::uint64_t> g_lowLevelCalls{ 0 };
+        std::atomic<std::uint64_t> g_lowLevelTrackedCalls{ 0 };
+        std::atomic<std::uint64_t> g_lowLevelTrackedViaMatrix{ 0 };
+        std::atomic<std::uint64_t> g_lowLevelTrackedViaRender{ 0 };
 
         constexpr std::size_t kCoverageSlots = 2048;    // power of two
         constexpr std::size_t kCallerCensusSlots = 256; // power of two
