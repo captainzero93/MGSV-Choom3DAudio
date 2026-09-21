@@ -58,6 +58,9 @@ constexpr std::uint64_t kListenerFreshMs = 250;
 constexpr float kDirectHrtfOutputGain = 1.00f;
 constexpr float kHybridLowpassAlpha = 0.0994231307f; // 800 Hz one-pole at 48 kHz
 constexpr float kHybridPeakGuard = 0.98f;
+constexpr float kMaxAzimuthStepDeg = 15.0f; // per-block azimuth slew cap
+constexpr std::uint32_t kGuardAttackSamples = 64; // ~1.3 ms gain-reduction ramp
+constexpr float kPeakGuardFloor = 0.25f;    // deepest per-voice cut the guard may apply
 
 constexpr std::size_t kRecentFoxSlots = 512;       // power of two
 constexpr std::size_t kRecentKeySlots = 512;       // power of two
@@ -333,6 +336,8 @@ struct BinauralHistoryState {
     std::uint64_t lastUse056 = 0; // LRU for probed slot selection
     float priorElevationDeg = 0.0f; // v0.59
     float peakGuard066 = 1.0f;       // per-voice 'never louder than the game' gain
+    std::int32_t priorLeftDelay = -1;  // slewed low-band alignment tap
+    std::int32_t priorRightDelay = -1;
     bool initialized = false;
     float history[kBinauralHistorySamples]{};
 };
@@ -2117,6 +2122,8 @@ bool PrepareDirectMeasuredHrir(
         state.lowDryRight = 0.0f;
         state.limiterGain = 1.0f;
         state.peakGuard066 = 1.0f;
+        state.priorLeftDelay = -1;
+        state.priorRightDelay = -1;
         state.priorElevationDeg = (g_elevation059.load(std::memory_order_relaxed) && std::isfinite(elevationDeg))
             ? (std::min)(90.0f, (std::max)(-90.0f, elevationDeg)) : 0.0f;
         state.initialized = true;
@@ -2126,8 +2133,10 @@ bool PrepareDirectMeasuredHrir(
     float delta = azimuthDeg - state.priorAzimuthDeg;
     while (delta >  180.0f) delta -= 360.0f;
     while (delta < -180.0f) delta += 360.0f;
-    float smoothedAngle =
-        state.priorAzimuthDeg + delta * 0.35f;
+    // Cap the per-block step so a fast mouse flick ramps in instead of slamming filters.
+    float step = delta * 0.35f;
+    step = (std::min)(kMaxAzimuthStepDeg, (std::max)(-kMaxAzimuthStepDeg, step));
+    float smoothedAngle = state.priorAzimuthDeg + step;
     while (smoothedAngle >  180.0f) smoothedAngle -= 360.0f;
     while (smoothedAngle < -180.0f) smoothedAngle += 360.0f;
 
@@ -2180,6 +2189,17 @@ bool PrepareDirectMeasuredHrir(
             rightDelay = tap;
         }
     }
+
+    // The dominant tap can jump ~15 samples between neighbouring directions, which
+    // steps the low band and clicks. Glide it one tap per block instead.
+    auto slewDelay = [](std::int32_t& prior, std::uint32_t want) {
+        if (prior < 0) { prior = static_cast<std::int32_t>(want); }
+        else if (static_cast<std::uint32_t>(prior) < want) ++prior;
+        else if (static_cast<std::uint32_t>(prior) > want) --prior;
+        return static_cast<std::uint32_t>(prior);
+    };
+    leftDelay = slewDelay(state.priorLeftDelay, leftDelay);
+    rightDelay = slewDelay(state.priorRightDelay, rightDelay);
 
     float blockPeak = 0.0f;
 
@@ -2547,15 +2567,19 @@ bool ApplyWideWorldHrtf(
         auto& guardState = GetBinauralHistory(node, destination);
         float target = 1.0f;
         if (binauralPeak > 0.3f && originalPeak > 0.0f && binauralPeak > originalPeak) {
-            target = (std::max)(0.5f, originalPeak / binauralPeak);
+            target = (std::max)(kPeakGuardFloor, originalPeak / binauralPeak);
             g_peakGuarded066.fetch_add(1, std::memory_order_relaxed);
         }
         if (target > guardState.peakGuard066) target = (std::min)(target, guardState.peakGuard066 + 0.02f);
         const float g0 = guardState.peakGuard066;
         if (g0 != 1.0f || target != 1.0f) {
-            const float inv = 1.0f / static_cast<float>(frames);
+            // Reach a reduction inside the block; keep the slow release ramp.
+            const std::uint32_t ramp = (target < g0)
+                ? (std::min)(frames, kGuardAttackSamples) : frames;
+            const float inv = 1.0f / static_cast<float>(ramp);
             for (std::uint32_t i = 0; i < frames; ++i) {
-                const float g = g0 + (target - g0) * ((static_cast<float>(i) + 1.0f) * inv);
+                const float t = (std::min)(1.0f, (static_cast<float>(i) + 1.0f) * inv);
+                const float g = g0 + (target - g0) * t;
                 g_directLeftEar[i] *= g;
                 g_directRightEar[i] *= g;
             }
@@ -4639,8 +4663,15 @@ bool ApplyBedVirtualizer055(std::int64_t destinationValue,std::int64_t sourceBuf
     if(peak>kHybridPeakGuard){target=kHybridPeakGuard/peak;++g_bedPeakGuard055;}
     if(target>state->limiterGain) target=(std::min)(target,state->limiterGain+0.02f);
     const float g0=state->limiterGain;
-    if(g0!=1.0f || target!=1.0f)
-        for(std::uint32_t i=0;i<frames;++i){const float g=g0+(target-g0)*((static_cast<float>(i)+1.0f)*invFrames);left[i]*=g;right[i]*=g;}
+    if(g0!=1.0f || target!=1.0f){
+        // Reach a reduction inside the block; release keeps the full-block ramp.
+        const std::uint32_t ramp=(target<g0)?(std::min)(frames,kGuardAttackSamples):frames;
+        const float invRamp=1.0f/static_cast<float>(ramp);
+        for(std::uint32_t i=0;i<frames;++i){
+            const float t=(std::min)(1.0f,(static_cast<float>(i)+1.0f)*invRamp);
+            const float g=g0+(target-g0)*t;left[i]*=g;right[i]*=g;
+        }
+    }
     state->limiterGain=target;
 
     // Hand both ears back through the game's own mixer as unity mono voices.
