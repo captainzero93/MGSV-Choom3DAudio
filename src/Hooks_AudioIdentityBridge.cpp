@@ -53,7 +53,7 @@ namespace HRIRSET = ::MGSVAudioProbe::HRIRSET;
 constexpr double kRadiansToDegrees = 57.2957795130823208768;
 constexpr std::size_t kBinauralMaxFrames = 1024;
 constexpr std::size_t kBinauralHistorySamples = 512; // power of two
-constexpr std::size_t kBinauralStateSlots = 1024;    // power of two
+constexpr std::size_t kBinauralStateSlots = 1024;   
 constexpr std::uint64_t kListenerFreshMs = 250;
 constexpr float kDirectHrtfOutputGain = 1.00f;
 constexpr float kHybridLowpassAlpha = 0.0994231307f; // 800 Hz one-pole at 48 kHz
@@ -62,11 +62,11 @@ constexpr float kMaxAzimuthStepDeg = 15.0f;       // per-block azimuth slew cap
 constexpr std::uint32_t kGuardAttackSamples = 64; // ~1.3 ms gain-reduction ramp
 constexpr float kPeakGuardFloor = 0.25f;          // deepest per-voice cut the guard may apply
 
-constexpr std::size_t kRecentFoxSlots = 512;     // power of two
-constexpr std::size_t kRecentKeySlots = 512;     // power of two
-constexpr std::size_t kRecentObjectSlots = 512;  // power of two
-constexpr std::size_t kRecentPlayingSlots = 512; // power of two
-constexpr std::size_t kTraceSlots = 8192;        // power of two
+constexpr std::size_t kRecentFoxSlots = 512;    
+constexpr std::size_t kRecentKeySlots = 512;     
+constexpr std::size_t kRecentObjectSlots = 512;  
+constexpr std::size_t kRecentPlayingSlots = 512; 
+constexpr std::size_t kTraceSlots = 8192;       
 constexpr std::uint64_t kRecentIdentityTtlMs = 15000;
 constexpr std::uint64_t kTransformLogIntervalMs = 500;
 constexpr std::uint64_t kSummaryIntervalMs = 2000;
@@ -85,7 +85,7 @@ constexpr std::uint32_t kEventGenerator = 0xDC384714u;
 constexpr std::uint32_t kEventSteam = 0xDC26FE36u;
 constexpr std::uint32_t kEventObservedA54F = 0xA54F174Fu;
 constexpr std::uint64_t kMatrixBindLogIntervalMs = 250;
-constexpr std::size_t kMatrixBindGateSlots = 256; // power of two
+constexpr std::size_t kMatrixBindGateSlots = 256;
 
 using SourcePostEventFn = int*(__fastcall*)(std::int64_t body, int* outResult, std::uint32_t eventId);
 
