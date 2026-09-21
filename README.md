@@ -169,7 +169,7 @@ The KU 100 is a measured dummy head, not your own head and ears. Front/back ambi
 
 ## Building from source
 
-Install Visual Studio with **Desktop development with C++** and a Windows SDK, then run `BUILD.cmd` from the extracted project folder.
+Install Visual Studio with **Desktop development with C++** and a Windows SDK (10.0.22621.0), then run `BUILD.cmd` from the extracted project folder.
 
 MinHook, spdlog and fmt are bundled. The DLL uses a static C runtime and its own MinHook instance. It stays loaded until the game exits; live unloading is not supported.
 
