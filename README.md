@@ -6,7 +6,7 @@ Binaural headphone audio for Metal Gear Solid V: The Phantom Pain.
 **Game:** `mgsvtpp.exe` 1.0.15.4, PE timestamp `0x6A4CB898`  
 **Loading:** Infinite Heaven's Lua module system
 
-I made this to give MGSV's sounds more direction over headphones, including front, back and height. It uses positions from the game's audio engine to render supported sounds through measured head-related impulse responses, or HRIRs. These are the time-domain filters used to produce HRTF audio.
+I made this to give MGSV's sounds more direction over headphones, including front, back and height. It uses positions from the game's engine to render supported sounds through measured head-related impulse responses, or HRIRs. These are the time-domain filters used to produce HRTF audio.
 
 The current plugin has no GUI or keybinds. Everything is configured in `plugins/choomaudio.lua`, with a restart after changes. This version has been tested in game by multiple people (but is still being tweaked).
 
@@ -24,7 +24,7 @@ Close the game and copy both folders from `dist` into the folder containing `mgs
 | Settings | `plugins/choomaudio.lua` |
 | IH loader module | `mod/modules/ChoomAudio_Core.lua` |
 
-Include the Lua loader. Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
+Include the Lua loader (needed on older versions). Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
 
 ## Settings
 
@@ -169,7 +169,7 @@ The KU 100 is a measured dummy head, not your own head and ears. Front/back ambi
 
 ## Building from source
 
-Install Visual Studio with **Desktop development with C++** and a Windows SDK, then run `BUILD.cmd` from the extracted project folder.
+Install Visual Studio with **Desktop development with C++** and a Windows SDK (10.0.22621.0), then run `BUILD.cmd` from the extracted project folder.
 
 MinHook, spdlog and fmt are bundled. The DLL uses a static C runtime and its own MinHook instance. It stays loaded until the game exits; live unloading is not supported.
 
