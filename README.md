@@ -24,7 +24,7 @@ Close the game and copy both folders from `dist` into the folder containing `mgs
 | Settings | `plugins/choomaudio.lua` |
 | IH loader module | `mod/modules/ChoomAudio_Core.lua` |
 
-Include the Lua loader. Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
+Include the Lua loader (needed on older versions). Putting the DLL in `plugins` alone is not enough for this installation method. The module uses `package.loadlib` to load `choomaudio.dll` and call its `luaopen_choomaudio` entry. Native initialization then runs on a worker thread.
 
 ## Settings
 
