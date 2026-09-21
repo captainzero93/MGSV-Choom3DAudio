@@ -6,7 +6,7 @@ Binaural headphone audio for Metal Gear Solid V: The Phantom Pain.
 **Game:** `mgsvtpp.exe` 1.0.15.4, PE timestamp `0x6A4CB898`  
 **Loading:** Infinite Heaven's Lua module system
 
-I made this to give MGSV's sounds more direction over headphones, including front, back and height. It uses positions from the game's audio engine to render supported sounds through measured head-related impulse responses, or HRIRs. These are the time-domain filters used to produce HRTF audio.
+I made this to give MGSV's sounds more direction over headphones, including front, back and height. It uses positions from the game's engine to render supported sounds through measured head-related impulse responses, or HRIRs. These are the time-domain filters used to produce HRTF audio.
 
 The current plugin has no GUI or keybinds. Everything is configured in `plugins/choomaudio.lua`, with a restart after changes. This version has been tested in game by multiple people (but is still being tweaked).
 
