@@ -1,5 +1,7 @@
 #3DAudio for MGSV
 
+Mod is temporarily hidden from Nexus whilst I make many changes after feedback
+
 Binaural headphone audio for Metal Gear Solid V: The Phantom Pain.
 
 **Version:** v0.74  
