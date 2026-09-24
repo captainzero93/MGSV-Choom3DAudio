@@ -1,3 +1,5 @@
+## please be aware this is in ALPHA state it has issues with crackling etc
+
 #3DAudio for MGSV
 
 Mod is temporarily hidden from Nexus whilst I make many changes after feedback
